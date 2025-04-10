@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Configuration - Caddy Defender Docs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">Caddy Defender Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../intro/" class="nav-link">Getting Started</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../installation/" class="nav-link">Installation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Configuration</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../examples/" class="nav-link">Examples</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../fetchers/" class="nav-link">Fetchers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../CONTRIBUTING/" class="nav-link">Contributing</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../installation/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../examples/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#configuration" class="nav-link">Configuration</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#embedded-ip-ranges" class="nav-link">Embedded IP Ranges</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#rate-limiting-configuration" class="nav-link">Rate Limiting Configuration</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#example-configurations" class="nav-link">Example Configurations</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#documentation" class="nav-link">Documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="configuration"><strong>Configuration</strong></h1>
+<h3 id="caddyfile-syntax"><strong>Caddyfile Syntax</strong></h3>
+<p>The <code>defender</code> directive is used to configure the Caddy Defender plugin. It has the following syntax:</p>
+<pre><code class="language-caddyfile">defender &lt;responder&gt; {
+    message &lt;custom_message&gt;
+    ranges &lt;cidr_or_predefined...&gt;
+    url &lt;url&gt;
+}
+</code></pre>
+<ul>
+<li><code>&lt;responder&gt;</code>: The responder backend to use.</li>
+<li><code>&lt;cidr_or_predefined&gt;</code>: An optional list of CIDR ranges or predefined range keys to match against the client's IP. Defaults to <a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/plugin.go"><code>aws azurepubliccloud deepseek gcloud githubcopilot openai</code></a>.</li>
+<li><code>&lt;custom_message&gt;</code>: A custom message to return when using the <code>custom</code> responder.</li>
+<li><code>&lt;url&gt;</code>: The URI that the <code>redirect</code> responder would redirect to.</li>
+</ul>
+<h4 id="supported-responder-types"><strong>Supported responder types:</strong></h4>
+<ul>
+<li><code>block</code>: Returns a <code>403 Forbidden</code> response.</li>
+<li><code>custom</code>: Returns a custom message (requires <code>message</code>).</li>
+<li><code>drop</code>: Drops the connection.</li>
+<li><code>garbage</code>: Returns garbage data to pollute AI training.</li>
+<li><code>redirect</code>: Returns a <code>308 Permanent Redirect</code> response (requires <code>url</code>).</li>
+<li><code>ratelimit</code>: Marks requests for rate limiting (requires <a href="https://github.com/mholt/caddy-ratelimit">Caddy-Ratelimit</a> to be installed as well ).</li>
+<li><code>tarpit</code>: Stream data at a slow, but configurable rate to stall bots and pollute AI training.</li>
+</ul>
+<h3 id="json-configuration"><strong>JSON Configuration</strong></h3>
+<pre><code class="language-JSON">{
+    &quot;message&quot;: &quot;&quot;,
+    &quot;url&quot;: &quot;&quot;,
+    &quot;raw_responder&quot;: &quot;&quot;,
+    &quot;ranges&quot;: [&quot;&quot;],
+    &quot;whitelist&quot;: [&quot;&quot;],
+    &quot;tarpit_config&quot;: {▾
+        &quot;headers&quot;: {
+            &quot;&quot;: &quot;&quot;
+        },
+        &quot;timeout&quot;: 0,
+        &quot;bytes_per_second&quot;: 0,
+        &quot;code&quot;: 0
+    },
+    &quot;serve_ignore&quot;: false
+}
+</code></pre>
+<p><code>message</code></p>
+<ul>
+<li>Message specifies the custom response message for <code>custom</code> responder type. Required only when using <code>custom</code> responder.</li>
+</ul>
+<p><code>url</code></p>
+<ul>
+<li>URL specifies the custom URL to redirect clients to for <code>redirect</code> responder type. Required only when using <code>redirect</code> responder.</li>
+</ul>
+<p><code>raw_responder</code></p>
+<ul>
+<li>RawResponder defines the response strategy for blocked requests. <strong>Required</strong>.</li>
+<li>Must be one of the <a href="#supported-responder-types">supported responder types</a>, (e.g "block", "drop", etc.).</li>
+</ul>
+<p><code>ranges</code></p>
+<ul>
+<li>Ranges specifies IP ranges to block, which can be either:</li>
+<li>CIDR notations (e.g., "192.168.1.0/24")</li>
+<li>Predefined service keys (e.g., "openai", "aws") Default:</li>
+</ul>
+<p><code>whitelist</code></p>
+<ul>
+<li>An optional whitelist of IP addresses to exclude from blocking.</li>
+<li>NOTE: this only supports IP addresses, not ranges.</li>
+<li>If empty, no IPs are whitelisted.</li>
+<li>Default: <code>[]</code></li>
+</ul>
+<p><code>tarpit_config</code></p>
+<ul>
+<li>An optional configuration for the <code>tarpit</code> responder</li>
+<li>Config holds the tarpit responder`s configuration.</li>
+<li>Default: <code>{Headers: {}, timeout: 30s, ResponseCode: 200}</code></li>
+</ul>
+<p><code>tarpit_config/headers</code></p>
+<ul>
+<li>An optional configuration for the headers to be set with the tarpit config.</li>
+<li>Default: <code>{}</code></li>
+</ul>
+<p><code>tarpit_config/timeout</code></p>
+<ul>
+<li>A Duration represents the elapsed time between two instants as an int64 nanosecond count.</li>
+<li>The representation limits the largest representable duration to approximately 290 years.</li>
+</ul>
+<p><code>tarpit_config/bytes_per_second</code></p>
+<ul>
+<li>An optional configuration for the default amount of bytes to stream per second.</li>
+<li>Default: <code>24</code>.</li>
+</ul>
+<p><code>tarpit_config/code</code></p>
+<ul>
+<li>An optional configuration for the default response code for the tarpit responder.</li>
+<li>Default: <code>http.statusOK</code></li>
+</ul>
+<p><code>serve_ignore</code></p>
+<ul>
+<li>ServeIgnore specifies whether to serve a robots.txt file with a "Disallow: /" directive.</li>
+<li>Default: <code>false</code></li>
+</ul>
+<blockquote>
+<p><em>For code examples, check out <a href="../examples/">examples</a>.</em></p>
+</blockquote>
+<hr />
+<h2 id="embedded-ip-ranges"><strong>Embedded IP Ranges</strong></h2>
+<p>The plugin includes predefined IP ranges for popular AI services. These ranges are embedded in the binary and can be used without additional configuration.</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Service</th>
+<th style="text-align: center;">Key</th>
+<th style="text-align: center;">IP Ranges (GitHub)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Alibaba Cloud</td>
+<td style="text-align: center;">aliyun</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/aliyun.go">aliyun.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">VPNs</td>
+<td style="text-align: center;">vpn</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/vpn.go">vpn.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">AWS</td>
+<td style="text-align: center;">aws</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/aws/aws.go">aws.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">AWS Region</td>
+<td style="text-align: center;">aws-us-east-1, aws-us-west-1, aws-eu-west-1</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/aws/aws_region.go">aws_region.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">DeepSeek</td>
+<td style="text-align: center;">deepseek</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/deepseek.go">deepseek.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">GitHub Copilot</td>
+<td style="text-align: center;">githubcopilot</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/github.go">github.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Google Cloud Platform</td>
+<td style="text-align: center;">gcloud</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/gcloud.go">gcloud.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Oracle Cloud Infrastructure</td>
+<td style="text-align: center;">oci</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/oracle.go">oracle.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Microsoft Azure</td>
+<td style="text-align: center;">azurepubliccloud</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/azure.go">azure.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">OpenAI</td>
+<td style="text-align: center;">openai</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/openai.go">openai.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Mistral</td>
+<td style="text-align: center;">mistral</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/mistral.go">mistral.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Vultr</td>
+<td style="text-align: center;">vultr</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/vultr.go">vultr.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Cloudflare</td>
+<td style="text-align: center;">cloudflare</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/cloudflare.go">cloudflare.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Digital Ocean</td>
+<td style="text-align: center;">digitalocean</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/digitalocean.go">digitalocean.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">Linode</td>
+<td style="text-align: center;">linode</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/linode.go">linode.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;"><a href="https://caddyserver.com/docs/caddyfile/matchers#remote-ip">Private</a></td>
+<td style="text-align: center;">private</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/private.go">private.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">All IP addresses</td>
+<td style="text-align: center;">all</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/all.go">all.go</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="disabled-by-default-require-manual-inclusion-at-build-time"><strong>Disabled by default (require manual inclusion at build time)</strong></h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: center;">Service</th>
+<th style="text-align: center;">Key</th>
+<th style="text-align: center;">IP Ranges (GitHub)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: center;">Tor Exit Nodes</td>
+<td style="text-align: center;">tor</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/tor.go">tor.go</a></td>
+</tr>
+<tr>
+<td style="text-align: center;">ASN (Autonomous System Numbers)</td>
+<td style="text-align: center;">asn</td>
+<td style="text-align: center;"><a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/fetchers/asn.go">asn.go</a></td>
+</tr>
+</tbody>
+</table>
+<p>More are welcome! For a precompiled list, see the <a href="https://github.com/JasonLovesDoggo/caddy-defender/blob/main/ranges/data/generated.go">embedded results</a>.</p>
+<h2 id="rate-limiting-configuration"><strong>Rate Limiting Configuration</strong></h2>
+<p><strong>Feature:</strong> Match requests by IP range and apply rate limiting using <a href="https://github.com/mholt/caddy-ratelimit">caddy-ratelimit</a>.</p>
+<h3 id="caddyfile-syntax_1"><strong>Caddyfile Syntax</strong></h3>
+<pre><code class="language-caddy">defender ratelimit {
+    ranges &lt;cidr_or_predefined...&gt;
+}
+
+rate_limit {
+    # Match requests marked by Defender
+    match header X-Defender-RateLimit true
+
+    # Rate limiting parameters
+    rate  &lt;requests-per-second&gt;
+    burst &lt;burst-size&gt;
+    key   &lt;rate-limit-key&gt;
+}
+</code></pre>
+<h3 id="json-configuration_1"><strong>JSON Configuration</strong></h3>
+<pre><code class="language-json">{
+  &quot;handler&quot;: &quot;defender&quot;,
+  &quot;raw_responder&quot;: &quot;ratelimit&quot;,
+  &quot;ranges&quot;: [&quot;aws&quot;, &quot;10.0.0.0/8&quot;],
+  &quot;rate_limit_header&quot;: &quot;X-Defender-RateLimit&quot;
+}
+</code></pre>
+<h2 id="example-configurations"><strong>Example Configurations</strong></h2>
+<h3 id="basic-configuration"><strong>Basic Configuration</strong></h3>
+<pre><code class="language-caddy">example.com {
+    defender ratelimit {
+        ranges cloudflare openai
+    }
+
+    rate_limit {
+        match header X-Defender-RateLimit true
+        rate  5r/s
+        burst 10
+        key   {http.request.remote.host}
+    }
+
+    respond &quot;Hello World&quot;
+}
+</code></pre>
+<h3 id="advanced-configuration"><strong>Advanced Configuration</strong></h3>
+<pre><code class="language-caddy">api.example.com {
+    defender ratelimit {
+        ranges 192.168.1.0/24 azure
+        rate_limit_header X-API-RateLimit
+    }
+
+    rate_limit {
+        match header X-API-RateLimit true
+        rate  10r/s
+        burst 20
+        key   {http.request.uri.path}
+
+        # Optional: Custom response
+        respond {
+            status_code 429
+            body &quot;Too Many Requests - Try Again Later&quot;
+        }
+    }
+
+    reverse_proxy localhost:3000
+}
+</code></pre>
+<h2 id="documentation"><strong>Documentation</strong></h2>
+<h3 id="directives"><strong>Directives</strong></h3>
+<p><strong>Defender Rate Limit Responder:</strong></p>
+<ul>
+<li><code>ranges</code> - IP ranges to apply rate limiting (CIDR or predefined)</li>
+<li><code>rate_limit_header</code> (optional) - Header to mark requests for rate limiting (default: <code>X-Defender-RateLimit</code>)</li>
+</ul>
+<p><strong>Rate Limit Module:</strong></p>
+<ul>
+<li><code>match header</code> - Match the header set by Defender</li>
+<li><code>rate</code> - Requests per second (e.g., <code>10r/s</code>)</li>
+<li><code>burst</code> - Allow temporary bursts of requests</li>
+<li><code>key</code> - Rate limit key (typically client IP or path)</li>
+</ul>
+<h3 id="how-it-works"><strong>How It Works</strong></h3>
+<ol>
+<li><strong>IP Matching:</strong> Defender checks if client IP matches configured ranges</li>
+<li><strong>Header Marking:</strong> Matching requests get a header (<code>X-Defender-RateLimit: true</code>)</li>
+<li><strong>Rate Limiting:</strong> caddy-ratelimit applies limits only to marked requests</li>
+<li><strong>Request Processing:</strong> Non-matched requests bypass rate limiting</li>
+</ol>
+<h3 id="use-cases"><strong>Use Cases</strong></h3>
+<ul>
+<li>Protect API endpoints from scraping</li>
+<li>Mitigate brute force attacks</li>
+<li>Enforce different rate limits for:</li>
+<li>Different geographic regions</li>
+<li>Known bot networks</li>
+<li>Internal vs external traffic</li>
+</ul>
+<h3 id="requirements"><strong>Requirements</strong></h3>
+<ul>
+<li><a href="https://github.com/mholt/caddy-ratelimit">caddy-ratelimit</a> module installed</li>
+<li><a href="https://github.com/JasonLovesDoggo/caddy-defender">caddy-defender</a> v0.5.0+</li>
+</ul>
+<h3 id="notes"><strong>Notes</strong></h3>
+<ol>
+<li><strong>Order Matters:</strong> Defender must come before ratelimit in handler chain</li>
+<li><strong>Header Customization:</strong> Change header name if conflicts occur</li>
+<li><strong>Combination with Other Protections:</strong></li>
+</ol>
+<pre><code class="language-caddy">defender ratelimit {
+   ranges aws
+}
+
+rate_limit {
+   match header X-Defender-RateLimit true
+   rate 2r/s
+}
+
+defender block {
+   ranges known-bad-ips
+}
+</code></pre>
+<h3 id="struct-tag"><strong>Struct Tag</strong></h3>
+<p>Configuration of the caddy-defender plugin properly in the struct tag:</p>
+<p>Module ID: <code>http.handlers.defender</code></p>
+<pre><code>caddy:&quot;namespace=http.handlers.defender inline_key=raw_responder&quot;
+</code></pre>
+<ul>
+<li><code>namespace=http.handlers.defender</code>: The module namespace for finding implementations.</li>
+<li><code>inline_key=raw_responder</code>: The JSON object will contain a key for <code>raw_responder</code>, whose value is the module name (like ratelimit, block, etc.).</li>
+</ul>
+<p>See the <a href="https://caddyserver.com/docs/modules/http.handlers.defender">caddyserver documentation</a> for more info.</p>
+<h3 id="troubleshooting"><strong>Troubleshooting</strong></h3>
+<p>1. <strong>Check Headers:</strong></p>
+<pre><code class="language-bash">curl -I http://example.com
+</code></pre>
+<p>2. <strong>Verify Handler Order:</strong> Defender → Ratelimit → Other handlers</p>
+<p>3. <strong>Test Rate Limits:</strong></p>
+<pre><code class="language-bash"># Simulate requests from blocked range
+for i in {1..20}; do
+   curl -H &quot;X-Forwarded-For: 20.202.43.67&quot; http://example.com
+done
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
