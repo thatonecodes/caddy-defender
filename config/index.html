@@ -460,16 +460,7 @@ defender block {
    ranges known-bad-ips
 }
 </code></pre>
-<h3 id="struct-tag"><strong>Struct Tag</strong></h3>
-<p>Configuration of the caddy-defender plugin properly in the struct tag:</p>
-<p>Module ID: <code>http.handlers.defender</code></p>
-<pre><code>caddy:&quot;namespace=http.handlers.defender inline_key=raw_responder&quot;
-</code></pre>
-<ul>
-<li><code>namespace=http.handlers.defender</code>: The module namespace for finding implementations.</li>
-<li><code>inline_key=raw_responder</code>: The JSON object will contain a key for <code>raw_responder</code>, whose value is the module name (like ratelimit, block, etc.).</li>
-</ul>
-<p>See the <a href="https://caddyserver.com/docs/modules/http.handlers.defender">caddyserver documentation</a> for more info.</p>
+<hr />
 <h3 id="troubleshooting"><strong>Troubleshooting</strong></h3>
 <p>1. <strong>Check Headers:</strong></p>
 <pre><code class="language-bash">curl -I http://example.com
