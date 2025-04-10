@@ -101,7 +101,7 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#manual-compliation-from-source" class="nav-link">Manual compliation from source</a>
+            <li class="nav-item" data-bs-level="2"><a href="#download-caddy-with-the-binary-pre-installed" class="nav-link">Download Caddy with the binary pre-installed:</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -143,22 +143,8 @@ Use the built binary to run Caddy with your configuration:</p>
 <pre><code class="language-bash">./caddy run --config Caddyfile
 </code></pre>
 <hr />
-<h2 id="manual-compliation-from-source"><strong>Manual compliation from source</strong></h2>
-<p>If you want full control, you can compile Caddy with the plugin from source.</p>
-<p>1. <strong>Clone the repository</strong>:</p>
-<pre><code class="language-bash">git clone https://github.com/caddyserver/caddy.git
-cd caddy
-</code></pre>
-<p>2. <strong>Modify <code>go.mod</code> to include the plugin</strong>:</p>
-<pre><code class="language-bash">go mod edit -require=github.com/jasonlovesdoggo/caddy-defender@latest
-go mod tidy
-</code></pre>
-<p>3. <strong>Build Caddy</strong>:</p>
-<pre><code class="language-bash">go build -o caddy ./cmd/caddy
-</code></pre>
-<p>4. <strong>Run Caddy</strong>:</p>
-<pre><code class="language-bash">./caddy run --config Caddyfile
-</code></pre></div>
+<h2 id="download-caddy-with-the-binary-pre-installed"><strong>Download Caddy with the binary pre-installed</strong>:</h2>
+<p>You can download caddy along with the caddy defender plugin pre-installed in a binary by <a href="https://caddyserver.com/download?package=github.com%2Fjasonlovesdoggo%2Fcaddy-defender">downloading it from their site here</a>.</p></div>
             </div>
         </div>
 
